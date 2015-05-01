@@ -1,7 +1,7 @@
 /// <reference path="main/my-app-component.ts" />
 /// <reference path="main/test1.ts" />
 //import {Extras} from 'scripts/_extras';
-var _extras_1 = require('scripts/_extras');
+//import {initExtras} from 'scripts/_extras';
 //@Component({
 //    selector: 'my-app'
 //})
@@ -19,7 +19,7 @@ var _extras_1 = require('scripts/_extras');
 //bootstrap(MyAppComponent);
 setTimeout(function () {
     console.info('main - running initExtras (3 seconds later)');
-    _extras_1.initExtras();
+    //initExtras();
     console.info('main timeout handler complete');
 }, 3000);
 //# sourceMappingURL=_main.js.map
