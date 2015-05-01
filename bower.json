@@ -1,0 +1,24 @@
+{
+  "name": "angular2-ts-demo",
+  "version": "1.0.0",
+  "homepage": "https://github.com/nalbion/angular2-ts-demo",
+  "authors": [
+    "Nicholas Albion <nalbion@yahoo.com>"
+  ],
+  "description": "Angular 2.0 TypeScript Demo",
+  "keywords": [
+    "Angular2",
+    "TypeScript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.8.3"
+  }
+}
