@@ -3,8 +3,6 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload');
 
 gulp.task('watch', ['build', 'connect'], function() {
-    gulp.watch('app/**/*.ts', ['scripts']);
-
     //livereload.listen();
 
     // watch for changes
@@ -12,7 +10,6 @@ gulp.task('watch', ['build', 'connect'], function() {
         'app/*.html',
         '.tmp/css/**/*.css',
         '.tmp/js/**/*.js',
-        'app/scripts/**/*.{js,ts}',
         'app/images/**/*'
     ]).on('change', livereload.changed);
 
