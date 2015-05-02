@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     ts = require('gulp-typescript'),
     replace = require('gulp-replace'),
     sourcemaps = require('gulp-sourcemaps'),
+    babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     merge = require('merge2'),
     path = require('path');
@@ -26,32 +27,44 @@ var tsProject = ts.createProject({
 
 gulp.task('typescript', function () {
     var tsResult = gulp.src('app/scripts/**/*.ts')
+        //...no, that didn't work...// Change the external modules to internal
+        //.pipe(replace(/import \{.*\} from '\.\/(main\/[^']+)';/g,
+        //        '/// <reference path="$1.ts" />'))
+        //.pipe(replace(/export class ([^_][^\s]+) {/g,
+        //        'class $1 {'))
         .pipe(gulpif(!argv.production, sourcemaps.init()))
         .pipe(ts(tsProject, {}, ts.reporter.longReporter()));
 
-    return tsResult.js
-            //.pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
-            //.pipe(concat('main.js'))
-            //.pipe(replace(/'scripts\/_/, '\'js/'))
-            //.pipe(gulpif(!argv.production, sourcemaps.write()))
-            .pipe(gulp.dest(Config.paths.dest + '/js/es6'));
-
-    //return merge(
-    //    tsResult.js
-    //        .pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
+    //return tsResult.js
+    //        //.pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
     //        //.pipe(concat('main.js'))
-    //        .pipe(replace(/'scripts\/_/, '\'js/'))
-    //        .pipe(gulpif(!argv.production, sourcemaps.write()))
-    //        .pipe(gulp.dest(Config.paths.dest + '/js/main')),
-    //    tsResult.js
-    //        .pipe(ts.filter(tsProject, { referencedFrom: ['_extras.ts'] }))
-    //        //.pipe(concat('extras.js'))
-    //        .pipe(gulpif(!argv.production, sourcemaps.write()))
-    //        .pipe(gulp.dest(Config.paths.dest + '/js/extras')),
-    //    tsResult.dts.pipe(gulp.dest(Config.paths.dest + '/declarations')),
-    //    gulp.src('app/declarations/**/*d.ts')
-    //        .pipe(gulp.dest(Config.paths.dest + '/declarations'))
-    //);
+    //        //.pipe(replace(/'scripts\/_/, '\'js/'))
+    //        //.pipe(gulpif(!argv.production, sourcemaps.write()))
+    //        .pipe(gulp.dest(Config.paths.dest + '/js/es6'));
+
+    var babelOptions = {
+
+    };
+
+    return merge(
+        tsResult.js
+            .pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
+            .pipe(babel(babelOptions))
+            .pipe(concat('main.js'))
+            //.pipe(replace(/'scripts\/_/, '\'js/'))
+            //.pipe(replace(/var _([^ ]+) = require\(\'\.\/main\/.*/g, 'var _$1 = $1;'))
+            .pipe(gulpif(!argv.production, sourcemaps.write()))
+            .pipe(gulp.dest(Config.paths.dest + '/js')),
+        tsResult.js
+            .pipe(ts.filter(tsProject, { referencedFrom: ['_extras.ts'] }))
+            .pipe(babel(babelOptions))
+            .pipe(concat('extras.js'))
+            .pipe(gulpif(!argv.production, sourcemaps.write()))
+            .pipe(gulp.dest(Config.paths.dest + '/js')),
+        tsResult.dts.pipe(gulp.dest(Config.paths.dest + '/declarations')),
+        gulp.src('app/declarations/**/*d.ts')
+            .pipe(gulp.dest(Config.paths.dest + '/declarations'))
+    );
 });
 
 var systemjsConfig = {
@@ -107,40 +120,40 @@ gulp.task('scripts:lib', function() {
 });
 
 gulp.task('scripts', ['typescript', 'scripts:lib'], function() {
-    var Builder = require('systemjs-builder');
-
-    //Builder.build('.tmp/main', systemjsConfig, 'app/.out/sys-build-test.js')
-
-    var builder = new Builder(systemjsConfig);
-    //Promise.all([builder.trace('_main'), builder.trace('_extras')])
-    //    .then(function(trees) {
-    //        //var commonTree = builder.intersectTrees(trees[0], trees[1]);
-    //        return Promise.all([
-    //            //builder.buildTree(commonTree,
-    //            //                Config.paths.dest + '/js/shared-bundle.js'),
-    //            builder.buildTree(trees[0], //builder.subtractTrees(trees[0], commonTree),
-    //                            Config.paths.dest + '/js/main.js'),
-    //            builder.buildTree(trees[1], //builder.subtractTrees(trees[1], commonTree),
-    //                            Config.paths.dest + '/js/extras.js')
-    //        ]);
+    //var Builder = require('systemjs-builder');
+    //
+    ////Builder.build('.tmp/main', systemjsConfig, 'app/.out/sys-build-test.js')
+    //
+    //var builder = new Builder(systemjsConfig);
+    ////Promise.all([builder.trace('_main'), builder.trace('_extras')])
+    ////    .then(function(trees) {
+    ////        //var commonTree = builder.intersectTrees(trees[0], trees[1]);
+    ////        return Promise.all([
+    ////            //builder.buildTree(commonTree,
+    ////            //                Config.paths.dest + '/js/shared-bundle.js'),
+    ////            builder.buildTree(trees[0], //builder.subtractTrees(trees[0], commonTree),
+    ////                            Config.paths.dest + '/js/main.js'),
+    ////            builder.buildTree(trees[1], //builder.subtractTrees(trees[1], commonTree),
+    ////                            Config.paths.dest + '/js/extras.js')
+    ////        ]);
+    ////    });
+    //
+    //    builder.build('_main - angular2/angular2',
+    //            Config.paths.dest + '/js/main.js'
+    //            //,{ minify: true, sourceMaps: true, config: cfg
+    //            // lowResSourceMaps: true
+    //            // mangle: false, globalDefs: { DEBUG: false } }}
+    //    )
+    //    .then(function(output) {
+    //        // if outFile is left out, does in-memory compile
+    //        //    output.source;    // generated bundle source
+    //        //    output.sourceMap; // generated bundle source map
+    //        //    output.modules;   // array of module names defined in the bundle
+    //        //}
+    //        console.log('Build complete');
+    //    })
+    //    .catch(function(err) {
+    //        console.log('Build error');
+    //        console.log(err);
     //    });
-
-        builder.build('_main - angular2/angular2',
-                Config.paths.dest + '/js/main.js'
-                //,{ minify: true, sourceMaps: true, config: cfg
-                // lowResSourceMaps: true
-                // mangle: false, globalDefs: { DEBUG: false } }}
-        )
-        .then(function(output) {
-            // if outFile is left out, does in-memory compile
-            //    output.source;    // generated bundle source
-            //    output.sourceMap; // generated bundle source map
-            //    output.modules;   // array of module names defined in the bundle
-            //}
-            console.log('Build complete');
-        })
-        .catch(function(err) {
-            console.log('Build error');
-            console.log(err);
-        });
 });
