@@ -2,14 +2,22 @@
 <html>
   <head>
     <title>Angular 2 Demo</title>
-    <script src="https://github.jspm.io/jmcriffey/bower-traceur-runtime@0.0.87/traceur-runtime.js"></script>
-    <script src="https://jspm.io/system@0.16.10.js"></script>
-    <script src="angular2.dev.js"></script>
+    <!--<script src="https://github.jspm.io/jmcriffey/bower-traceur-runtime@0.0.87/traceur-runtime.js"></script>-->
+    <!--<script src="https://jspm.io/system@0.16.10.js"></script> -->
+    <!--<script src="js/lib/browser.js"></script> babel -->
+    <script src="js/lib/system.js"></script>
+    <!--<script src="angular2.dev.js"></script>-->
   </head>
   <body>
     <script>
-      System.import('js/main');
+      System.import('js/main!_main').then(function(a,b,c) {
+        console.info('a:', a);
+        console.info('b:', b);
+        console.info('c:', c);
+        a();
+      });
     </script>
+    <!--<script src="js/main.js"></script> -->
 
     <my-app></my-app>
   </body>

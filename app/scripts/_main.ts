@@ -1,28 +1,15 @@
 /// <reference path="../declarations/angular2/angular2.d.ts" />
-/// <reference path="main/my-app-component.ts" />
-/// <reference path="main/test1.ts" />
-import {Component, View, bootstrap} from 'angular2/angular2';
-//import {Extras} from 'scripts/_extras';
-import {initExtras} from 'scripts/_extras';
+/// <reference path="../../node_modules/typescript/bin/lib.es6.d.ts" />
+import {bootstrap} from 'angular2/angular2';
+import {MyAppComponent} from './main/my-app-component';
 
-@Component({
-    selector: 'my-app'
-})
-@View({
-    template: '<h1>Hello {{ name }}!</h1>'
-})
-class MyAppComponent {
-    name:string;
+export default function() {
 
-    constructor() {
-        this.name = 'World';
-    }
+    bootstrap(MyAppComponent);
+
+    setTimeout(function () {
+        console.info('main - running initExtras (3 seconds later)');
+        //initExtras();
+        console.info('main timeout handler complete');
+    }, 3000);
 }
-
-bootstrap(MyAppComponent);
-
-setTimeout(function () {
-    console.info('main - running initExtras (3 seconds later)');
-    initExtras();
-    console.info('main timeout handler complete');
-}, 3000);
