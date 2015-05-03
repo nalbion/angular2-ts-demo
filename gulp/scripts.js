@@ -35,29 +35,29 @@ gulp.task('typescript', function () {
         .pipe(gulpif(!argv.production, sourcemaps.init()))
         .pipe(ts(tsProject, {}, ts.reporter.longReporter()));
 
-    //return tsResult.js
-    //        //.pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
-    //        //.pipe(concat('main.js'))
-    //        //.pipe(replace(/'scripts\/_/, '\'js/'))
-    //        //.pipe(gulpif(!argv.production, sourcemaps.write()))
-    //        .pipe(gulp.dest(Config.paths.dest + '/js/es6'));
+    return tsResult.js
+            //.pipe(ts.filter(tsProject, { referencedFrom: ['_main.ts'] }))
+            //.pipe(concat('main.js'))
+            //.pipe(replace(/'scripts\/_/, '\'js/'))
+            //.pipe(gulpif(!argv.production, sourcemaps.write()))
+            .pipe(gulp.dest(Config.paths.dest + '/js/es6'));
 
-    return merge(
-        tsResult.js
-            .pipe(ts.filter(tsProject, { referencedFrom: ['main/init.ts'] }))
-            .pipe(concat('main.js'))
-            .pipe(replace(/'scripts\/_/, '\'js/'))
-            .pipe(gulpif(!argv.production, sourcemaps.write()))
-            .pipe(gulp.dest(Config.paths.dest + '/js')),
-        tsResult.js
-            .pipe(ts.filter(tsProject, { referencedFrom: ['extras/init.ts'] }))
-            .pipe(concat('extras.js'))
-            .pipe(gulpif(!argv.production, sourcemaps.write()))
-            .pipe(gulp.dest(Config.paths.dest + '/js')),
-        tsResult.dts.pipe(gulp.dest(Config.paths.dest + '/declarations')),
-        gulp.src('app/declarations/**/*d.ts')
-            .pipe(gulp.dest(Config.paths.dest + '/declarations'))
-    );
+    //return merge(
+    //    tsResult.js
+    //        .pipe(ts.filter(tsProject, { referencedFrom: ['main/init.ts'] }))
+    //        .pipe(concat('main.js'))
+    //        .pipe(replace(/'scripts\/_/, '\'js/'))
+    //        .pipe(gulpif(!argv.production, sourcemaps.write()))
+    //        .pipe(gulp.dest(Config.paths.dest + '/js')),
+    //    tsResult.js
+    //        .pipe(ts.filter(tsProject, { referencedFrom: ['extras/init.ts'] }))
+    //        .pipe(concat('extras.js'))
+    //        .pipe(gulpif(!argv.production, sourcemaps.write()))
+    //        .pipe(gulp.dest(Config.paths.dest + '/js')),
+    //    tsResult.dts.pipe(gulp.dest(Config.paths.dest + '/declarations')),
+    //    gulp.src('app/declarations/**/*d.ts')
+    //        .pipe(gulp.dest(Config.paths.dest + '/declarations'))
+    //);
 });
 
 /** SystemJS requires es6-module-loader.js to be in the same directory */
@@ -126,19 +126,19 @@ gulp.task('scripts', ['typescript', 'scripts:lib'], function() {
 
     //builder.build('main/**/* - angular2/angular2', Config.paths.dest + '/js/myModule.js');
 
-    //Promise.all([builder.trace('main/**/*'), //  - angular2/angular2
-    //             builder.trace('extras/**/*')])
-    //    .then(function(trees) {
-    //        //var commonTree = builder.intersectTrees(trees[0], trees[1]);
-    //        return Promise.all([
-    //            //builder.buildTree(commonTree,
-    //            //                Config.paths.dest + '/js/shared-bundle.js'),
-    //            builder.buildTree(trees[0], //builder.subtractTrees(trees[0], commonTree),
-    //                            Config.paths.dest + '/js/main.js'),
-    //            builder.buildTree(trees[1], //builder.subtractTrees(trees[1], commonTree),
-    //                            Config.paths.dest + '/js/extras.js')
-    //        ]);
-    //    });
+    Promise.all([builder.trace('main/**/*'), //  - angular2/angular2
+                 builder.trace('extras/**/*')])
+        .then(function(trees) {
+            //var commonTree = builder.intersectTrees(trees[0], trees[1]);
+            return Promise.all([
+                //builder.buildTree(commonTree,
+                //                Config.paths.dest + '/js/shared-bundle.js'),
+                builder.buildTree(trees[0], //builder.subtractTrees(trees[0], commonTree),
+                                Config.paths.dest + '/js/main.js'),
+                builder.buildTree(trees[1], //builder.subtractTrees(trees[1], commonTree),
+                                Config.paths.dest + '/js/extras.js')
+            ]);
+        });
 
         //builder.build('_main - angular2/angular2',
         //        Config.paths.dest + '/js/main.js'
