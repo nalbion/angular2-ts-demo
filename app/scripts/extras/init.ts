@@ -1,4 +1,6 @@
-/// <reference path="extras/test2.ts" />
+/// <reference path="./test2.ts" />
+console.info('file: extras/init.ts');
+
 export function initExtras() {
     console.info('initialising extras...');
     var test2 = new Test2();

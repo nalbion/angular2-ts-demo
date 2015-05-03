@@ -1,6 +1,6 @@
 class Test3 {
     constructor() {
-        console.info('test 3');
+        console.info('constructor - Test3');
     }
 
     foo():string {

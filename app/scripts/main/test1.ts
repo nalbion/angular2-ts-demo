@@ -1,1 +1,3 @@
-console.info('test 1');
+//export function test1() {
+//    console.info('test 1');
+//}
