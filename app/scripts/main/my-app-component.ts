@@ -17,5 +17,3 @@ export class MyAppComponent {
         this.foo = 'World';
     }
 }
-
-//bootstrap(MyAppComponent);

@@ -1,5 +1,6 @@
-/// <reference path="./test3.ts" />
-class Test2 {
+import {Test3} from './test3';
+
+export class Test2 {
     constructor() {
         console.info('[extras] constructor - Test2');
         var test3 = new Test3();

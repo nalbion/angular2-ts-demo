@@ -3,6 +3,8 @@
 var gulp = require('gulp'),
     livereload = require('gulp-livereload');
 
+var Config = require('./_config')
+
 gulp.task('connect', ['scripts', 'styles'], function () {
     livereload.listen();
 
@@ -10,7 +12,7 @@ gulp.task('connect', ['scripts', 'styles'], function () {
     var serveIndex = require('serve-index');
     var app = require('connect')()
         .use(require('connect-livereload')({port: 35729}))
-        .use(serveStatic('.tmp'))
+        .use(serveStatic(Config.paths.dest))
         .use(serveStatic('app'))
         .use(serveStatic('lib'))
         // paths to bower_components should be relative to the current file

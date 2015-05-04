@@ -1,4 +1,4 @@
-class Test3 {
+export class Test3 {
     constructor() {
         console.info('[extras] constructor - Test3');
     }

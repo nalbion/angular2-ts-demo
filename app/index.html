@@ -13,21 +13,21 @@
   <body>
     <my-app></my-app>
 
-    <!--<script src="js/main.js"></script>-->
-
     <script>
       System.config({
         paths: {
-          '*': '*.js',
-          'main/my-app-component': 'js/main.js',
-          'main/init': 'js/main.js',
-          'extras/init': 'js/extras.js'
-//          'angular2/*': 'angular2/*'
+          '*': 'js/*.js',
+//          'main/my-app-component': 'js/main.js',
+//          'main/init': 'js/main.js',
+//          'extras/init': 'js/extras.js'
+          'angular2/*': 'angular2/angular2.js'
         }
       });
-      System.import('main/init').then(function(main) {
+      System.import('main')
+              .then(function(main) {
         main.init();
-      });
+      })
+      ;
     </script>
   </body>
 </html>

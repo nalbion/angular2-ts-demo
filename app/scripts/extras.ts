@@ -1,8 +1,5 @@
-/// <reference path="./test2.ts" />
-//import {Test2} from './test2';
-
-console.info('file: extras/init.ts');
-
+import {Test2} from './extras/test2';
+console.info('file: extras.ts');
 
 export function initExtras() {
     console.info('[extras] initialising...');
