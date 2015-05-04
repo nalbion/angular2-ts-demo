@@ -30,8 +30,21 @@ var tsProject = ts.createProject({
     module: 'amd'       // commonjs (for Node) or amd (eg RequireJS for web)
 });
 
-gulp.task('typescript', function () {
-    var tsResult = gulp.src('app/scripts/**/*.ts')
+gulp.task('typescript:concat', function () {
+    return merge(
+        gulp.src('app/scripts/main/*.ts')
+            .pipe(concat('main/init.ts')),
+        gulp.src('app/scripts/extras/*.ts')
+            .pipe(concat('extras/init.ts'))
+    )
+        .pipe(replace(/\/\/\/ <reference path="\.[^\.].+/g, ''))
+        .pipe(replace(/.*\/\/ remove from es6 concat/g, ''))
+        .pipe(gulp.dest('.tmp/ts'));
+});
+
+gulp.task('typescript', ['typescript:concat'], function () {
+    //var tsResult = gulp.src('app/scripts/**/*.ts')
+    var tsResult = gulp.src('.tmp/ts/**/*.ts')
         .pipe(gulpif(!argv.production, sourcemaps.init()))
         .pipe(ts(tsProject, {}, ts.reporter.longReporter()));
 
@@ -60,22 +73,7 @@ gulp.task('typescript', function () {
     //);
 });
 
-/** SystemJS requires es6-module-loader.js to be in the same directory */
-gulp.task('scripts:lib', function() {
-    return merge(
-        merge(
-            gulp.src('bower_components/systemjs/dist/system.*'),
-            gulp.src('bower_components/es6-module-loader/dist/es6-module-loader.*'),
-            gulp.src('node_modules/babel-core/browser.js'),
-            gulp.src('node_modules/es6-micro-loader/dist/system-polyfill.min.js'),
-            gulp.src('node_modules/es6-micro-loader/dist/system-polyfill.js')
-        ).pipe(gulp.dest(Config.paths.dest + '/js/lib')),
-        gulp.src('node_modules/babel-core/external-helpers.js')
-            .pipe(gulp.dest(Config.paths.dest + '/babel')),
-        gulp.src('lib/angular2/angular2.js')
-            .pipe(gulp.dest(Config.paths.dest + '/angular2'))
-        );
-});
+
 
 var systemjsConfig = {
     // baseURL: where to find library code
@@ -126,7 +124,7 @@ gulp.task('scripts', ['typescript', 'scripts:lib'], function() {
 
     //builder.build('main/**/* - angular2/angular2', Config.paths.dest + '/js/myModule.js');
 
-    Promise.all([builder.trace('main/**/*'), //  - angular2/angular2
+    Promise.all([builder.trace('main/**/* - extras/init'), //  - angular2/angular2
                  builder.trace('extras/**/*')])
         .then(function(trees) {
             //var commonTree = builder.intersectTrees(trees[0], trees[1]);
@@ -158,4 +156,22 @@ gulp.task('scripts', ['typescript', 'scripts:lib'], function() {
         //    console.log('Build error');
         //    console.log(err);
         //});
+});
+
+
+/** SystemJS requires es6-module-loader.js to be in the same directory */
+gulp.task('scripts:lib', function() {
+    return merge(
+        merge(
+            gulp.src('bower_components/systemjs/dist/system.*'),
+            gulp.src('bower_components/es6-module-loader/dist/es6-module-loader.*'),
+            gulp.src('node_modules/babel-core/browser.js'),
+            gulp.src('node_modules/es6-micro-loader/dist/system-polyfill.min.js'),
+            gulp.src('node_modules/es6-micro-loader/dist/system-polyfill.js')
+        ).pipe(gulp.dest(Config.paths.dest + '/js/lib')),
+        gulp.src('node_modules/babel-core/external-helpers.js')
+            .pipe(gulp.dest(Config.paths.dest + '/babel')),
+        gulp.src('lib/angular2/angular2.js')
+            .pipe(gulp.dest(Config.paths.dest + '/angular2'))
+    );
 });

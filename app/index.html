@@ -13,32 +13,21 @@
   <body>
     <my-app></my-app>
 
-    <!--
-    If the following script tag is omitted both System.import('main...'
-    calls invoke an AJAX request to download this file (because of the paths config)
-    -->
-    <script src="js/main.js"></script>
+    <!--<script src="js/main.js"></script>-->
 
     <script>
       System.config({
         paths: {
           '*': '*.js',
           'main/my-app-component': 'js/main.js',
-          'main/init': 'js/main.js'
+          'main/init': 'js/main.js',
+          'extras/init': 'js/extras.js'
 //          'angular2/*': 'angular2/*'
         }
       });
-//      System.import('js/main');
-//      System.import('js/main').then(function(main){
-//        main.init();
-//      });
       System.import('main/init').then(function(main) {
         main.init();
       });
-      System.import('main/my-app-component');
     </script>
-
-
-
   </body>
 </html>

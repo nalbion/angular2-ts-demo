@@ -1,5 +1,5 @@
-/// <reference path="../../declarations/angular2/angular2.d.ts" />
-import {Component, View, bootstrap} from 'angular2/angular2';
+/// <reference path="../../../declarations/angular2/angular2.d.ts" />
+import {Component, View} from 'angular2/angular2';
 
 console.info('file: my-app-component.ts');
 
@@ -18,4 +18,4 @@ export class MyAppComponent {
     }
 }
 
-bootstrap(MyAppComponent);
+//bootstrap(MyAppComponent);
