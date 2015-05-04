@@ -34,11 +34,15 @@ The following Gulp tasks are supported:
     
 ## Browser Console Logs
 
-    test 1
-    _main.ts:25 main - running initExtras (3 seconds later)
-    _extras.ts:4 initialising extras...
-    test2.ts:5 test 2
-    test3.ts:4 test 3
-    test2.ts:7 test3.foo(): bar
-    _extras.ts:6 initialised extras!
-    _main.ts:27 main timeout handler complete
+    file: extras.ts
+    file: my-app-component.ts
+    file: main.ts
+    inner main
+    constructor: MyAppComponent
+    [main] running initExtras (3 seconds later)
+    [extras] initialising...
+    [extras] constructor - Test2
+    [extras] constructor - Test3
+    calling test3.foo(): bar
+    initialised extras!
+    main timeout handler complete
